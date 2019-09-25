@@ -1,3 +1,11 @@
+- [Table of Contents](#table-of-contents)
+  - [Precursor Training](#precursor-training)
+    - [this is a test](#this-is-a-test)
+      - [is this another header?](#is-this-another-header)
+        - [what about _this_ shit?](#what-about-this-shit)
+          - [and ___this shit?___](#and-this-shit)
+
+
 # Table of Contents
 ## Precursor Training
 ### this is a test
@@ -7,8 +15,12 @@
 
 * if I have to 
 * create lists
+    * with levels
+      * a bunch of levels
 
 1. numbered
+   1. has levels too
+      1. but how many?
 2. then they are numbered
 3. as if they are numbered
 
@@ -49,3 +61,7 @@ if i was all like `#!/bin/pwsh` then the *nix heads would hate.
 
 
 - [ ] does this work?
+- [x] yes it works  
+
+you can paste directly to a gist comment, and github will store the image:  
+<a href="https://user-images.githubusercontent.com/991809/65563975-e71c4e80-df3a-11e9-90c5-c70edab9eca4.png"><img src="https://user-images.githubusercontent.com/991809/65563975-e71c4e80-df3a-11e9-90c5-c70edab9eca4.png" width=100></a>
