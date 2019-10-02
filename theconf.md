@@ -1,4 +1,4 @@
-# intro
+# Intro
 ## Training
 Fundamentals 1, as well as the architecture training are free and are located on [the training portal](https://www.splunk.com/en_us/training/free-courses/splunk-fundamentals-1.html).  
 
@@ -26,4 +26,4 @@ Fundamentals 1, as well as the architecture training are free and are located on
   * 2:15PM: IT1970 - Tracking Micro Services with Splunk
   * 
 
-## Breakout talks I will watch at night
+## Breakout talks that are interesting
