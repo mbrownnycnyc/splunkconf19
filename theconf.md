@@ -27,3 +27,7 @@ Fundamentals 1, as well as the architecture training are free and are located on
   * 
 
 ## Breakout talks that are interesting
+
+
+## day 1: Creating Dashboards
+
