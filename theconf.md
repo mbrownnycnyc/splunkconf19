@@ -59,6 +59,8 @@
       - [another example](#another-example)
       - [where do we go from here:](#where-do-we-go-from-here)
   - [1:45PM: SEC1556 - Building Behavioral Detections: Cross-Correlating Suspicious Activity with the MITRE ATT&CK™ Framework](#145pm-sec1556---building-behavioral-detections-cross-correlating-suspicious-activity-with-the-mitre-attck%e2%84%a2-framework)
+    - [My warnings](#my-warnings)
+    - [overall summary](#overall-summary)
     - [building behavioral detections](#building-behavioral-detections)
       - [getting started](#getting-started)
       - [risk building and alerting](#risk-building-and-alerting)
@@ -72,6 +74,7 @@
         - [tuning](#tuning)
         - [enrichment](#enrichment)
     - [take aways](#take-aways)
+    - [Q&A](#qa)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
@@ -655,6 +658,16 @@ Here are some additional notes on accelerating data models:
 
 ## 1:45PM: SEC1556 - Building Behavioral Detections: Cross-Correlating Suspicious Activity with the MITRE ATT&CK™ Framework
 
+### My warnings
+* this talk was awesome.
+* it essentially contains an entire risk based program design
+* you absolutely should watch the session on the web site to fully grasp all the examples.
+
+### overall summary
+* they essentially generate additional fields and create summary indexes
+* some of the additional fields are ingested as combined data points
+* these fields are then extracted at search time
+
 ### building behavioral detections
 
 #### getting started
@@ -752,7 +765,6 @@ Here are some additional notes on accelerating data models:
 * schema accelerated event search <--research this... may be as efficient as a `tstats`
 * use `eventstats`, `makemv` to parse the manaully generated fields mitreAttack, risk_information, etc
 
-
 #### tuning and enrichment
 
 ##### tuning
@@ -774,4 +786,12 @@ Here are some additional notes on accelerating data models:
 ### take aways
 * enrichments increase context
 * tuneing is a murder
-* 
+* watch:
+  * SEC1538
+  * SEC1908
+
+### Q&A
+* sysmon event reduction
+* probability usage for weighing risk events
+  * outliers can be offset by inflating the riskscore
+* google around for olaf thomas
