@@ -33,6 +33,45 @@
     - [Module 5: Using Drilldowns](#module-5-using-drilldowns)
     - [Module 6: Adding Advanced Behaviors & Visualizations](#module-6-adding-advanced-behaviors--visualizations)
     - [Additional items:](#additional-items)
+- [Monday](#monday)
+  - [Keynote:](#keynote)
+    - [new products](#new-products)
+  - [11AM: SEC2787 - Security Super Session](#11am-sec2787---security-super-session)
+    - [Marketing stuff](#marketing-stuff)
+    - [Product integration progress](#product-integration-progress)
+      - [SOC operations analysis:](#soc-operations-analysis)
+      - [Splunk Mission Control](#splunk-mission-control)
+      - [Splunk Data Stream Processing (DSP)](#splunk-data-stream-processing-dsp)
+      - [Intel dude](#intel-dude)
+      - [Splunk ES 6.0 release](#splunk-es-60-release)
+      - [Splunk UBA 5.0 release](#splunk-uba-50-release)
+      - [Splunk Phantom 4.6 release](#splunk-phantom-46-release)
+      - [Upcoming products](#upcoming-products)
+  - [12:30PM: FN1945 - Artificial Intelligence got you down? Here’s Machine Learning for Humans!](#1230pm-fn1945---artificial-intelligence-got-you-down-heres-machine-learning-for-humans)
+    - [Machine Learning](#machine-learning)
+      - [Overview](#overview)
+      - [Splunk Machine Learning](#splunk-machine-learning)
+      - [MLTK analysis:](#mltk-analysis)
+      - [MLTK explanation:](#mltk-explanation)
+      - [What you need to work with the MLTK:](#what-you-need-to-work-with-the-mltk)
+      - [MLTK use case examples within app dashboard](#mltk-use-case-examples-within-app-dashboard)
+      - [Brute force examples](#brute-force-examples)
+      - [another example](#another-example)
+      - [where do we go from here:](#where-do-we-go-from-here)
+  - [1:45PM: SEC1556 - Building Behavioral Detections: Cross-Correlating Suspicious Activity with the MITRE ATT&CK™ Framework](#145pm-sec1556---building-behavioral-detections-cross-correlating-suspicious-activity-with-the-mitre-attck%e2%84%a2-framework)
+    - [building behavioral detections](#building-behavioral-detections)
+      - [getting started](#getting-started)
+      - [risk building and alerting](#risk-building-and-alerting)
+      - [finding threats](#finding-threats)
+        - [MITRE ATT&CK](#mitre-attck)
+        - [resources to build ccontent](#resources-to-build-ccontent)
+      - [build risk indexes](#build-risk-indexes)
+      - [alerting on risk scores](#alerting-on-risk-scores)
+      - [risk incidents rules:](#risk-incidents-rules)
+      - [tuning and enrichment](#tuning-and-enrichment)
+        - [tuning](#tuning)
+        - [enrichment](#enrichment)
+    - [take aways](#take-aways)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
@@ -43,6 +82,9 @@
   * `chart`
   * `fillnull`
   * `timechart`
+* Need to discuss whether our MSSP SOC will be utilizing our Splunk instance and using Mission Controol
+  * Does Hurricane Labs have this capability?
+  * Is this a goal?
 
 
 
@@ -360,4 +402,376 @@ Here are some additional notes on accelerating data models:
 ### Additional items:
 * remember datacubes
 * check out summary indexes
+
+
+# Monday 
+
+## Keynote:
+
+### new products
+
+* the CTO presented several new products that seem interesting.
+
+
+## 11AM: SEC2787 - Security Super Session
+
+### Marketing stuff
+
+* Speaks about some marketing stuff related to the past few years at splunk .conf and where splunk as a company is positioning itself within the security market.  It is the #1 SIEM.
+* splunk is positiining itself to be the centralized point of data, analyitics (including an expansion into AI and ML), and automate.
+
+### Product integration progress
+
+* former Phantom CEO speaks
+* Splunk's strategy is to integrate all products to provide coverage across the SOC: analyze, collaborate, remediate/orchestrate.
+
+#### SOC operations analysis:
+
+* Splunk covers the SOC work flow / security event flow:
+  * ingest:
+    * ES
+  * detect:
+    * ES
+    * UBA
+  * presdict:
+    * UBA
+  * automate
+    * Phantom
+  * orchestrate
+    * Phantom
+  * recommend
+    * Phantom
+  * collborate:
+    * ES
+    * Pahntom
+  * investigate:
+    * ES
+  * manage cases
+    * Phantom
+  * report: ES
+* apply the following items:
+  * AI
+  * ML
+  * Content
+* Product: Splunk Mission Control == the solution to SOC coverage
+  * Phantom
+  * UBA
+  * ES
+
+#### Splunk Mission Control
+
+* themes for coverage of the event lifecycle:
+  * interconnect data, analysis an ops
+  * embeded automation
+  * in context
+* Cloud based platform == interconnects directly to cloud products
+  * splunk ES
+  * Splunk UBA
+  * Phantom
+    * Automation broker resides on prem
+      * this allows automations to affect on prem systems.
+  * splunkd
+* Mission Control UI
+  * very nice UI
+  * Playbook visualization of execution.
+  * playbook editor is a flow-based programming IDE
+  * You can overlay and leverage framework based flows (such as NIST 800)
+  * Surface additional data, such as threat intel/risk scores
+
+#### Splunk Data Stream Processing (DSP)
+
+* this displaces kafka.
+  
+#### Intel dude
+
+* they implemented and went live with SOC in splunk within 5 weeks.
+* [insert architecture image here]
+* supports boringtechnology.com strategy
+  * but also should be using products that are universally used
+* enforces stream processing
+
+#### Splunk ES 6.0 release
+
+* Assets and identities enhacement
+* MLTK powered search
+* Investigations reporting
+* Licensing
+  * UBA is most easily licensed
+
+#### Splunk UBA 5.0 release
+
+* custom ML models
+* HA/DR warm standby
+* Enhanced device management
+* new data category
+  * cloud file sharing
+  * database
+  * badge access
+  * printer
+
+#### Splunk Phantom 4.6 release
+
+* Phantom Mobile
+* AWS Elasticity
+* SHC for Search
+* ITSI Monitoring
+* 300 apps, 1900+ actions
+  * Apps are open sourcing
+    * starting with 33
+* Licensing
+  * seat based
+  * no more limits on
+    * event processing numbers
+    * use case executions
+
+#### Upcoming products
+
+* Analytics:
+  * cloud data sources
+    * SignalFX: cloud stuff
+    * Omnition: container stuff
+  * stream processing (DSP)
+    * integration with ML/AI
+  * Data Fabric Search (DFS)
+    * utilizing search across many data lakes
+
+## 12:30PM: FN1945 - Artificial Intelligence got you down? Here’s Machine Learning for Humans!
+
+### Machine Learning
+
+#### Overview
+
+* ML started in 1822: lovelace and babbage
+  * 1959: arthur samuels
+  * Contemporary: Tom Mitchell / CMU
+* not great for data with no pattern
+* Definite ML and AI
+  * ML: the process of teaching a computer to determine an outcome based on the data it is given.
+  * AI: when a machine can do a task that requires human intelligence.
+    * We are not doing this.
+  * supervised learning: teaching by example
+  * unsupervised learning: uses algo to indentify patterns
+
+#### Splunk Machine Learning
+
+* Core Platform Search has ML built-in:
+  * SPL function `anomalydetection`...  built-in to baseline SPL!
+  * `Patterns` tab in the results
+* Premium Solutions
+* Machine Learning Toolkit (MLTK)
+
+#### MLTK analysis:
+* anomaly detection
+  * deviation from past behavior
+  * deviation from peers
+  * unusual change in features
+  * ITSI MAD Nnomaly Detection (premium solution)
+* Predictive analytics
+  * predict seervice health score prducting churn
+  * predicting events
+  * trend forecasting
+  * detecting influencing entities
+  * early warning of failure: predictive maintenance
+* Clustering:
+  * identify peer groups
+  * event correlation
+  * reduce alert noise
+  * ITSI Event Analytics (premium solution)
+
+#### MLTK explanation:
+
+* Assitants:
+  * guided model building, testing and deployment for common objectives
+* showcases
+  * interactive examples for typical IT, security, business and IoT use cases
+* Algos
+* ML commands
+* ML-SPL API
+* Python for Scientific Computer library
+
+#### What you need to work with the MLTK:
+
+* splunk instance
+* pythin for scientific computing
+* MLTK
+* Dataset and use case
+* Domain Generation Algorithms (DGA) app:
+  * waht it does: phishing use cases... who what where based on the FQDN in embedded links.
+  * URL toolbox App
+  * 3D Scatterplot
+  * Parallel coordinates
+  * there are other TAs for URLs and other stuff.
+
+#### MLTK use case examples within app dashboard
+
+* remember to use `anomalydetection` SPL function
+* install MTLK
+* go to the MLTK
+* go to Showcase tab
+* focus on detection outlier for instance
+
+#### Brute force examples
+* example details: brute force
+  * sysmon derived data... reduced data: event ID 4625
+    * the progression of a brute force attack:
+      * step 1: find user name == results in "bad username" errors
+      * step 2: find password == results in "badd password" errors
+      * step 3: nothing == the attacker has gained access.
+  * take the events and put them into bins:
+    * `index=sysmon eventID=4625 | bin _time span=1h | stats count as logins by _time`
+  * go into MLTK --> experiments tab
+    * detect numberic outliers, click on it
+    * create new experiment
+    * paste `index=sysmon eventID=4625 | bin _time span=1h | stats count as logins by _time` into the search
+    * field to analyze: logins
+    * threshold methods: try them all see what helps
+      * median absolute deviation
+    * threshold multiplier: controls what is an outlier... accept default generally, but you can try to increase... this is reflected as a sahded area on data and outliers
+    * you can then save in the upper right
+    * once saved, and oou work, your experiement history
+
+#### another example
+
+* Go to MLTK --> Experiments
+  * smart forecasting icon> new
+  * datasets> specialdays
+    * VALUE ADD: populate the specialdays
+  * pick a dataset> next
+  * add preprocessing step (this would be specialdays, etc)
+  * Smart forecasting
+    * edit> pick a field
+
+#### where do we go from here:
+
+* Mess with the MLTK
+* splunk blogs categories:
+  * machine learning blog
+* user guide for MLTK.
+* ML classes on udemy
+* YouTube splunk channel
+* Splunk education
+  * advanced system: splunk for analytics and data science
+
+
+## 1:45PM: SEC1556 - Building Behavioral Detections: Cross-Correlating Suspicious Activity with the MITRE ATT&CK™ Framework
+
+### building behavioral detections
+
+#### getting started
+* logs and risk indexes
+  * log types:
+    * network logs: proxy, firewall, IPS, HTTP and DNS
+      * Splunk and CIM compliance
+      * risk objects:
+        * IP is not reliable
+        * if necesary, build enrichmsent macros
+          * use the `lookup` command
+          * macro: `identify_user` `identify_asset` and `enrich_user`, `enrich_asset`
+    * endpoint logs
+      * EDR and/or sysmon
+        * event IDs:
+          * 1 (process creations)
+          * 3 (network connections)
+          * 7 (DLL loads)
+          * 8 (CreateRemoteThread process ingestion)
+          * 10 (ProcessAccess cred dumpings)
+          * 11 (FileCreate)
+          * 12,13,14 (RegistryCreatoOrDelete, RegistryValueset, RegistrKeyValueRename)
+          * 17,18 (Pipe Created, Pipe Connected)
+      * WEL (refer to malwarearchelogy.com)
+        * auth and permissions on DCs
+        * sysmon, disable:
+          * 4688, 4657, 4663, 5156
+        * powershell logging
+          * make sure you create exceptions
+
+#### risk building and alerting
+
+* risk indexes: watch jim apger + stuart mcintosh conf18 talk "say goodbye to your big alert pipeline, and say hello to your new risk-based approach"
+  * ties together many data sources
+  * normalized event logs
+  * enrish user/host data
+* Build to a summary index, add useful metadata and analyst context, events don't need to build risk, can provide situational awareness.
+
+#### finding threats
+
+##### MITRE ATT&CK
+* pros/cons
+  * pros:
+    * visualize overall defense against
+    * pinpoint high valu investments in security data soruces and content development
+  * cons:
+    * advanced techniques hide in noisy log sources
+* break down:
+  * tactics give us categories of activity:
+    * techniques offer specifics of activity
+    * not that you will find things that match tecniques, but more enrichment/correlation is needed to reduce false positives.
+* develop searches for techniques
+  * match a use case, then pipe it into valueable evals
+    * add `* | eval mitreAttack` 
+    * `risk_message`
+    * `risk_infromation`
+    * `risk_scorecombined`
+
+##### resources to build ccontent
+* https://lolbas-project.github.io
+* https://gtfobins.github.io
+* search splunk blogs for "staff picks for splunk security"
+* https://github.com/olafharlong/threathunting
+* search splunk blogs for hunting with spliunk the basics on splunk blog
+
+#### build risk indexes
+* build indexes: summary indexes
+* alerting
+  * search events in the rick index by user or host
+  * slide data to find potentially malicious activity
+  * monitor and adjust enrichmena to tune
+  * add useful metadata for anlayst
+* `risk_scorecombined` macro breakdown
+  * increase risk for users and assets
+    * use cases:
+      * vulnerabilities: crit and high
+      * silo
+      * asset base risk
+      * user departures
+      * user data access risk
+  * risk_mod_count_combined = risk_mod_count_sys + risk_mod_count_user
+  * calculate risk_score
+
+#### alerting on risk scores
+* risk score exceeds thresholds
+* multiple MITRE tastics
+* high number of unique ATT&CK techniques
+* sudden increase in ATT&CK techniques
+* Suddent significant increase in risk score types
+* risk events from numberous sourcetypes
+* run over a timespan: 24 hours, 7 days, 30 days.
+
+#### risk incidents rules:
+
+* schema accelerated event search <--research this... may be as efficient as a `tstats`
+* use `eventstats`, `makemv` to parse the manaully generated fields mitreAttack, risk_information, etc
+
+
+#### tuning and enrichment
+
+##### tuning
+* tune risk incident rules with comfirmed incidents from standard alerts
+* tune risk building events by slicing up your risk index for insight
+  * remove users for instance
+  * consider including an `eval`ed field like `adjustImpact` and processing this within your risk building
+* red team is your best friend
+* reduces:
+  * risk lets you retain potentially useful "noise" as baselines and context
+  * trim useless noise, but lean towards downgrading severity of risk
+  * checkout `mvexpand` since we used `makemv` earlier
+
+##### enrichment
+* include enrichment of data within events in your risk table when you discover it.
+  * `| lookup miteenrichment.esv * OUTPUT *`
+    * store enrichment data as lookuptables, then use `OUTPUT` to output fields
+
+### take aways
+* enrichments increase context
+* tuneing is a murder
 * 
