@@ -75,6 +75,11 @@
         - [enrichment](#enrichment)
     - [take aways](#take-aways)
     - [Q&A](#qa)
+  - [3PM: FN1054 - Best Practices and Better Practices for Admins](#3pm-fn1054---best-practices-and-better-practices-for-admins)
+    - [intro](#intro)
+    - [Splunk Success Framework: <-- review this on splunk.com](#splunk-success-framework----review-this-on-splunkcom)
+  - [4:15PM: FN1206 - The path to operational enlightenment. An introduction to wire data with Splunk Stream.](#415pm-fn1206---the-path-to-operational-enlightenment-an-introduction-to-wire-data-with-splunk-stream)
+    - [online session will be available later this week.](#online-session-will-be-available-later-this-week)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
@@ -731,7 +736,7 @@ Here are some additional notes on accelerating data models:
 * https://gtfobins.github.io
 * search splunk blogs for "staff picks for splunk security"
 * https://github.com/olafharlong/threathunting
-* search splunk blogs for hunting with spliunk the basics on splunk blog
+* search splunk blogs for hunting with spliunk the basics
 
 #### build risk indexes
 * build indexes: summary indexes
@@ -784,8 +789,9 @@ Here are some additional notes on accelerating data models:
     * store enrichment data as lookuptables, then use `OUTPUT` to output fields
 
 ### take aways
-* enrichments increase context
-* tuneing is a murder
+* this will create an entire job title for you.
+* enrichments increase context.
+* tuning is an ongoing beast.
 * watch:
   * SEC1538
   * SEC1908
@@ -795,3 +801,117 @@ Here are some additional notes on accelerating data models:
 * probability usage for weighing risk events
   * outliers can be offset by inflating the riskscore
 * google around for olaf thomas
+
+
+## 3PM: FN1054 - Best Practices and Better Practices for Admins
+
+### intro
+
+* https://splk.it/conf19-FN1054 --> https://drive.google.com/file/d/13fNrvMI_Yk8V1zliaeEComgpfkmWTYjV/view
+* "validated_best-practice" tag on splunk
+
+### Splunk Success Framework: <-- review this on splunk.com
+* platform:
+  * upgrade cheat sheet: see documentation "HowtoupgradeSplunk"
+  * review EOL stuff
+  * run the "splunk platform upgrade readiness app"
+    * VALUE ADD: make sure you review the recommendations with cloud ops
+  * Create a UAT enviromment:
+    * "lab environment best practices for a splunk deployment" --> "splunk ssf sandbox lab"
+  * Indent and whitespace do not effect ingestion of configurations
+  * `btool`
+  * use DNS for deployment servers
+    * search --> "splunk ssf dns"
+  * bootstrap
+    * point to DS/Master/Deployer
+    * system/local overwritten by apps
+    * centralized control
+    * Global App < Function App
+  * naming conventions
+    * search --> "splunk ssf naming convention"
+      * template: `[sommary]_[company]_[object type]`
+      * create a template for `index.conf` and deploy to particular `splunkd` indexes
+  * version control
+    * good: scripted inout
+      * specific diag or just etc dir
+      * clean old copies
+    * better: scripted input
+      * `git`
+  * SH cluster:
+    * deployment server: implement `deployerPushThreads=auto` on deployment servers.
+  * SH limits.conf
+    * review:
+      ````
+      [scheduler]
+      max_searches_perc
+      auto_summary_perc
+      shc_role_quota_enforcement
+      shc_syswide_quota_enforcement
+      ````
+    * review:
+      ````
+      [realtime]
+      indexed_realtime_user_by_default
+
+      [search]
+      remote_timeline_fetchall
+      ````
+  * indexer performance improvement
+    * turn web server off
+    * `splunk web.conf startwebserver`
+  * specify a volumes: `indexes.conf`
+    ````
+    [volume:home]
+    path= $SPLUNK_DB
+    maxVolumeDataSizeMB = x
+    ````
+  * search for "indexerdiscovery"
+  * audit logins--> create an empty $SPLUNK_HOME/etc/passwd and $SPLUNK_HOME/etc/.ui_login
+  * Distribute a authentication.conf
+  * timezones:
+    * search for "splunk answers 776614"
+* program
+  * define scope of splunk
+    * search: "splunk ssf scope"
+    * if scope begins to increase, then make sure that you communicate up-channel to make sure you have resources available and bandwidth.
+    * to provide splunk as a service.
+      * servicenow --> use case onboarding
+      * servicenow --> new data source onboarding
+  * staffing model
+    * consider complexity of infrastructure
+    * work expectations
+* data
+  * compare QA & prod
+  * for on boarding of a new application:
+    * search for "logging best practices"
+    * VALUE ADD: review this for some standards and produce a standards document.
+    * onboarding phases
+      * data request
+      * definition
+        * fetch from source:
+          * read access
+          * data volume stimate
+          * get a sample of the data
+            * use sample for:
+            * event breaks
+            * time stamps
+    * workflow phase: use case definition
+      * consider: alerts vs. dashboards vs. searches
+  * The idea of technical SME and product SME.
+    * make sure that you know who you're communicating with.
+* people
+  * use your system as a user
+  * VALUE ADD: discuss the idea of having specific admin accounts per application for instance with Don and Alex...
+  * Don't bother with education... outsource to Splunk.
+  * when users have questions:
+    * tell them to create an account on answers.splunk.com
+    * and follow each user
+    * then have the user ask on answers
+    * you will answer on there
+  * reduce the choices for users
+    * create a welcome page per team... for instance, use them as shared workspace.
+  * search for "splunk ssd role-based data"
+
+## 4:15PM: FN1206 - The path to operational enlightenment. An introduction to wire data with Splunk Stream.
+
+### online session will be available later this week.
