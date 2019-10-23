@@ -114,7 +114,24 @@
     - [conclusion](#conclusion)
     - [general thoughts](#general-thoughts)
   - [3:30PM: SEC1391 - Building a Security Monitoring Strategy 2.0](#330pm-sec1391---building-a-security-monitoring-strategy-20)
-    - [](#)
+    - [intro](#intro-1)
+    - [Why is continuous security monitoring important](#why-is-continuous-security-monitoring-important)
+    - [what have we learned](#what-have-we-learned)
+    - [pick a security monitoring framework:](#pick-a-security-monitoring-framework)
+    - [define a data collection strategy](#define-a-data-collection-strategy)
+    - [onboard necessary data sources to cover ES](#onboard-necessary-data-sources-to-cover-es)
+    - [adaot an alerting and detection strategy](#adaot-an-alerting-and-detection-strategy)
+    - [alerting and detection frameworks](#alerting-and-detection-frameworks)
+    - [risk based alerting:](#risk-based-alerting)
+    - [aim to disrupt and contain](#aim-to-disrupt-and-contain)
+      - [essential use cases](#essential-use-cases)
+      - [reduce noise](#reduce-noise)
+      - [validate you use cases](#validate-you-use-cases)
+      - [maturity of program](#maturity-of-program)
+      - [prioritize objectives:](#prioritize-objectives)
+      - [demonstrate value](#demonstrate-value)
+    - [key take aways](#key-take-aways)
+  - [4:45PM: IT1761 - Service and Asset Discovery with Wire Data](#445pm-it1761---service-and-asset-discovery-with-wire-data)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
@@ -135,6 +152,8 @@
 * using NiFi with splunk:
   * http://my2ndhead.blogspot.com/2017/07/heating-up-data-pipeline-part-2.html
 * SA-investigator
+* Pulsar and Kafka:
+  * https://medium.com/@philipfeng/modern-open-source-messaging-apache-kafka-rabbitmq-nats-pulsar-and-nsq-ca3bf7422db5
 
 # Intro
 
@@ -1386,4 +1405,205 @@ Here are some additional notes on accelerating data models:
 
 ## 3:30PM: SEC1391 - Building a Security Monitoring Strategy 2.0
 
-### 
+* __worth rewatching__
+
+### intro
+
+* what's the point of security monitoring?
+  * visibility: alert and investigate procecses
+    * sec ops
+    * incident response
+  * Alignment
+    * cyber hygiene
+* How to make it tangigble - with a framework
+  * lay out a roadmap
+    * objectives
+      * what matters most
+      * what is acheivable in a defined timeframe
+      * what support is needed
+    * constraints
+      * operational requirements
+      * resiliency 
+      * laws and regs
+      * budget
+    * Capabilities
+      * people
+      * tech
+* Consider data sources and silos
+  * design and provide coverage
+
+### Why is continuous security monitoring important
+
+* next steps:
+  * Hopefully you've pickerda framework around which you can drive consistentcy 
+  * cyber security bible v1:1
+  * NIST SP 800-137
+ 
+### what have we learned
+
+* Pitfalls and false starts to a continuous security program
+  * paralysis in getting started
+    * exec spondorship
+    * streategies for onboarding
+    * alerting and detection streategies
+  * Lighjt on subsaance stretegy and adoption
+    * scalability
+    * adoption of technlogy trends
+  * lack of proper resourcing
+    * user enablement
+    * interconnected security stack
+    * analysts focused
+  * under utilization of OOTB capabilities
+    * smart store
+    * workload management
+    * Ai/ML powered analytics
+
+* data onboarding
+  * guided data onboarding as escurity essentials
+  * quick start guides: center of excellence
+* 
+
+### pick a security monitoring framework:
+
+* NIST CSF
+* Australian cyber sec HHS
+* CIS Top 20 critical controls
+* ISO 27001/2
+* ISA 62443: energy and utilities
+
+### define a data collection strategy
+
+* UF everywhere possible
+* log aggrgation when needed
+  * syslog
+  * streaming/realtime data sources
+  * kafka
+* Cloud Enviroments:
+  * PaaS
+  * SaaS
+* Third parties
+  * paterns 
+* Containers
+  * 
+
+### onboard necessary data sources to cover ES
+
+* network/host IDS
+* dns
+* anti-virus
+* email
+* web proxy
+* firewall
+* vuln scanning
+* AD
+* VPN
+* assets and identities
+* Ideal:
+  * sysmon
+  * cli or powershell
+  * next gen endpoint / EDR
+
+### adaot an alerting and detection strategy
+
+* make sure that alerts are valuable:
+  * use a risk based approach
+  * sufficient coverage and visibility of the tactics and techniques
+  * ability to disreuptand contain the risk quickly
+* create visibility, create presentations
+
+### alerting and detection frameworks
+* diamon model for intrusion analysis
+* MITRE ATT&CK
+* CIS
+* Palantir
+
+### risk based alerting:
+* integrate:
+  * threat intel
+    * create attributions for matches
+    * dynamic score based on feed, asset/identies, and other context
+* flow of creating a risk driven alert:
+  * risk rule:
+    * indicator search + risk core & attribution
+  * risk incident rules
+    * risk index
+  * resukts in a risk driven alert
+
+### aim to disrupt and contain
+
+* examples:
+  * CIS top 20
+  * ASD Essential 8
+  * Lockheed Martin Kill Chain
+* how to fulfill the disrupt and contain
+  * interconnccted security stack
+  * automation and orchestration
+  * augment humans with AI/ML
+
+#### essential use cases
+
+* ML/AI:
+  * baselining / historical
+    * collects data, creates model, evaluate against the model
+    * creates a baseline of what is "normal" and then measures any changes against that model
+  * caveat:
+    * not easily customized with custom use cases queries
+  * examples:
+    * lateral movement: UBA
+    * data exfiltration: UBA
+* heuristic and dataic detection
+  * human based:
+    * require extensive tuningcan generate more false positives
+    * allows for a highly/easily customized rules
+    * logic is entirely up to you
+* caveat
+  * not intelligent.
+* examples:
+  * mimikatz
+
+#### reduce noise
+
+* make sure you have use cases that make sense
+
+
+#### validate you use cases
+
+* gaurantee integrity of your alerts
+* regression testing: does what you did 6 months ago still work?
+* purple teaming
+  * see ATT&CK navigator and simulation runner
+  * use atomic red team
+
+
+#### maturity of program
+
+* Create RACIs
+* Define tyur strategic path
+  * align business goals
+* identify skill and tool gaps
+* create a plan and a path forward
+* define timelines
+* progress up kill chain
+* READ: info sec maturity model: blue lava
+
+#### prioritize objectives:
+
+* revisit the program solutions
+
+#### demonstrate value
+
+* utilize best practices
+* focus on 
+* communicate tisks
+* deliver reports
+
+### key take aways
+
+* enable your people
+* be transparent: quatify security and leverage metrics
+* purple teaming
+* avoid complacency: continuously seek opportunities for improvement and refinement
+* focus on business outcomes
+
+## 4:45PM: IT1761 - Service and Asset Discovery with Wire Data
+
