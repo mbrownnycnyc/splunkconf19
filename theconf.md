@@ -1,5 +1,5 @@
 - [questions for Telemak/David](#questions-for-telemakdavid)
-- [things I should know](#things-i-should-know)
+- [things I should know / do](#things-i-should-know--do)
 - [Intro](#intro)
   - [Training](#training)
   - [.conf Talks](#conf-talks)
@@ -93,13 +93,34 @@
     - [Why?](#why)
     - [uberAgent UXM: user expereince monitoring](#uberagent-uxm-user-expereince-monitoring)
     - [uberAgent Endpoint security analytics (ESA)](#uberagent-endpoint-security-analytics-esa)
+      - [features](#features)
+      - [rule blocks:](#rule-blocks)
+      - [rule examples:](#rule-examples)
+      - [rule detection elements:](#rule-detection-elements)
+      - [additional features](#additional-features)
     - [architecture](#architecture)
+  - [1PM: Using Splunk Data Stream Processor for advanced stream management](#1pm-using-splunk-data-stream-processor-for-advanced-stream-management)
+    - [intro... why did T-Mobile start using DSP?](#intro-why-did-t-mobile-start-using-dsp)
+    - [caveats and compensations](#caveats-and-compensations)
+    - [DSP](#dsp)
+    - [deconstructing complex data](#deconstructing-complex-data)
+    - [ESB versus internal apps](#esb-versus-internal-apps)
+    - [QA](#qa)
+  - [1:45: SEC1927 - ATT&CK™ Yourself Before Someone Else Does](#145-sec1927---attck%e2%84%a2-yourself-before-someone-else-does)
+    - [What we think ATT&CK means to network defenders](#what-we-think-attck-means-to-network-defenders)
+    - [how you can hunt with ATT&CK](#how-you-can-hunt-with-attck)
+    - [operationalization of ATT&CK in splunk](#operationalization-of-attck-in-splunk)
+    - [considering when operationalizaing ATT&CK](#considering-when-operationalizaing-attck)
+    - [conclusion](#conclusion)
+    - [general thoughts](#general-thoughts)
+  - [3:30PM: SEC1391 - Building a Security Monitoring Strategy 2.0](#330pm-sec1391---building-a-security-monitoring-strategy-20)
+    - [](#)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
 * 
 
-# things I should know
+# things I should know / do
 * commands
   * `chart`
   * `fillnull`
@@ -107,8 +128,13 @@
 * Need to discuss whether our MSSP SOC will be utilizing our Splunk instance and using Mission Controol
   * Does Hurricane Labs have this capability?
   * Is this a goal?
-
-
+* Embed splunk dashboards into other web sites:
+  * https://splunkbase.splunk.com/app/4377/#/details
+* embed other web sites into splunk dashboards
+  * https://splunkonbigdata.com/2018/09/22/embedding-google-search-engine-in-splunk-dashboard/
+* using NiFi with splunk:
+  * http://my2ndhead.blogspot.com/2017/07/heating-up-data-pipeline-part-2.html
+* SA-investigator
 
 # Intro
 
@@ -135,12 +161,12 @@ Fundamentals 1, as well as the architecture training are free and are located on
   * 4:15PM: FN1206 - The path to operational enlightenment. An introduction to wire data with Splunk Stream.
 * Wednesday
   * 11:15AM: SEC2534 - Security visibility through Windows endpoint analytics
-  * 12:30PM: SEC2366 - What's New in Splunk for Security
+  * 1PM: Using Splunk Data Stream Processor for advanced stream management
   * 1:45: SEC1927 - ATT&CK™ Yourself Before Someone Else Does
-  * 3PM: SEC1391 - Building a Security Monitoring Strategy 2.0
-  * 4:15PM: IT1761 - Service and Asset Discovery with Wire Data
+  * 3:30PM: SEC1391 - Building a Security Monitoring Strategy 2.0
+  * 4:45PM: IT1761 - Service and Asset Discovery with Wire Data
 * Thursday
-  * 10:30AM: SEC1525 - Finding Mr. Robot: Jump Start Your SOC and Operations Teams
+  * 10:30AM: Deploying Splunk Enterprise securiy and Splunk Phantom at Scale
   * 11:45AM: SEC1179 - The House Always Wins: Using Splunk Enterprise to Fight Data Exfiltration From Insider Threats
   * 1PM: IoT1103 - Applying Splunk Essentials for Predictive Maintenance
   * 2:15PM: IT1970 - Tracking Micro Services with Splunk
@@ -1077,7 +1103,8 @@ Here are some additional notes on accelerating data models:
 ### uberAgent Endpoint security analytics (ESA)
 
 * adds deep security visibility to the UXM agent (one agent)
-* features
+#### features
+
   * goal identify risky processes
     * match processes get
       * risk score (any number)
@@ -1088,62 +1115,70 @@ Here are some additional notes on accelerating data models:
             * combination of env variables & regex
             * env var is evaluated first, then regex... it's just builtin:
               * `^%programfiles%\\Windows Defender\\.+\.exe$`
-          * rule blocks:
-            * re-usable rule blocks
-              ````
-              [ConfigBlockDefines name=ParentIsMSOffice]
-              Parent.name = ^excel\.exe$
-              Parent.name = ^msaccess\.exe$
-              ````
-            * there are many attributes attached to entities, such as a "Process" entity as shown above
-          * rule examples:
-            * you can insert this `ruleblock` in a rule
-              ````
-              [ProcessTaggingRule]
-              RuleName = Detect script child process of MS Office apps
-              EventType = Process.Start
-              @ConfiguBlockInsert ParentIsMsOffice
-              Process.Name = ^cmd\.exe$
-              Process.Name = ^powershell\.exe$
-              Process.Name = ^cscript\.exe$
-              Process.Name = ^wscript\.exe$
-              Process.Name = ^ftp\.exe$
-              Tag = proces-start-msoffice-child
-              RiskScore = 100
-              ```` 
-            * rule detection elements:
-              * process parent properties
-                * name
-                * user
-                * path
-                * command line
-                * ...
-              * application name, version
-              * company elevation status
-              * session id
-              * directory permissions
-                * detection elements of directory permissions:
-                  *  `Process.DirectoryUserWriteable`
-                    *  checks if the process' directory is writeable by the user
-                  *  `Process.DirectorySdSddl`
-                     *  Security descriptor in SDDL format
-                     *  What uberAgent does:
-                        *  SIDs resolve to object names
-                        *  Permissions converted from SDDL hex access masks to strings
-               * Predefined rule elements VALUE ADD: these are all use cases
-                 * process starts from directories with a `low mandatory integrity` label
-                 * process starts from directories that are user-writeable
-                 * script child processes of MS office applications
-                 * child processes of the WMI service
-                 * child process of Adobe Reader
-                 * LOLBAS (various)
-             * scheduled tasks integrity:
-               * UI missing: COM actions and custom triggers
-               * authir task is arbitrary
-               * uberAgent detects new or changes tasks
-                 * reads all properties of the task, including COM, exec, email, message
-    * dashboard to visualize findings
-    * uberAgent provides process hierarchies and trajectory
+
+#### rule blocks:
+
+  * re-usable rule blocks
+    ````
+    [ConfigBlockDefines name=ParentIsMSOffice]
+    Parent.name = ^excel\.exe$
+    Parent.name = ^msaccess\.exe$
+    ````
+  * there are many attributes attached to entities, such as a "Process" entity as shown above
+
+#### rule examples:
+
+* you can insert this `ruleblock` in a rule
+  ````
+  [ProcessTaggingRule]
+  RuleName = Detect script child process of MS Office apps
+  EventType = Process.Start
+  @ConfiguBlockInsert ParentIsMsOffice
+  Process.Name = ^cmd\.exe$
+  Process.Name = ^powershell\.exe$
+  Process.Name = ^cscript\.exe$
+  Process.Name = ^wscript\.exe$
+  Process.Name = ^ftp\.exe$
+  Tag = proces-start-msoffice-child
+  RiskScore = 100
+  ```` 
+
+#### rule detection elements:
+
+* process parent properties
+  * name
+  * user
+  * path
+  * command line
+  * ...
+* application name, version
+* company elevation status
+* session id
+* directory permissions
+  * detection elements of directory permissions:
+    *  `Process.DirectoryUserWriteable`
+      *  checks if the process' directory is writeable by the user
+    *  `Process.DirectorySdSddl`
+       *  Security descriptor in SDDL format
+       *  What uberAgent does:
+          *  SIDs resolve to object names
+          *  Permissions converted from SDDL hex access masks to strings
+ * Predefined rule elements VALUE ADD: these are all use cases
+   * process starts from directories with a `low mandatory integrity` label
+   * process starts from directories that are user-writeable
+   * script child processes of MS office applications
+   * child processes of the WMI service
+   * child process of Adobe Reader
+   * LOLBAS (various)
+ * scheduled tasks integrity:
+   * UI missing: COM actions and custom triggers
+   * authir task is arbitrary
+   * uberAgent detects new or changes tasks
+     * reads all properties of the task, including COM, exec, email, message
+
+#### additional features
+* dashboard to visualize findings
+* uberAgent provides process hierarchies and trajectory
 
 ### architecture
 
@@ -1152,4 +1187,203 @@ Here are some additional notes on accelerating data models:
 * TAs exist
   * UXM
   * ESA
-* 
+
+## 1PM: Using Splunk Data Stream Processor for advanced stream management
+
+### intro... why did T-Mobile start using DSP?
+
+* value add: create an "ingest map" of all data
+  * HTTP Event Collector (HEC)
+    * absolutely feasible to direct people to use
+  * syslog
+* pivotal cloud foundry
+
+### caveats and compensations
+
+* watch out for different logging standards
+* VALUE ADD: create a logging standard
+* avoid `rex` as it isn't efficient.  VALUE ADD: run historic reports on `rex` usage and see if patterns occur.
+* do not preprocess data via scripts... but this is a natural way to compensate for script format differences.
+* why t-mboile needed DSP:
+  * simple, modular, scalable
+  * within splunk
+  * route flexibility
+  * visibility of performance of pipelines
+
+### DSP
+* what is it
+  * filter
+  * enrich
+  * normalize
+  * transform
+  * aggregate
+  * format
+  * mask sensitive data
+  * detect data patterns or condtions
+  * track and monitor pipeline health
+* what that means:
+  * turn raw data into high value info
+  * take action on data in motion
+  * protect sensitive data
+  * distribute data to splunk and other datalakes
+* supported data sources:
+  * kafka
+  * kinesis
+  * s3 cloudtrail
+  * event hubs
+  * rest apis
+  * splunk UF and HF
+* support dst
+  * kafka
+  * kinesis
+  * splunk
+
+### deconstructing complex data
+
+* VALUE ADD: you can execute arbitrary code by integrateing a function within a TA... reference the [ssdeep TA](https://splunkbase.splunk.com/app/3158/).
+* they affect data by using `eval` and routing to different indexes.
+* VALUE ADD: remember to use summary indexes.
+* Some functions blocks:
+  * source 
+  * filter
+  * eval
+  * aggregate
+  * normalized
+  * sink
+* DSP has structured data types!!!
+
+### ESB versus internal apps
+
+* the ESB team wasn't easy to work with
+
+
+### QA
+
+* data types it doesn't like?
+  * custom function
+* pulling TA transforms into the DSP?
+  * not exactly
+* ssdeep TAs?
+  * all this processing is done in RAM
+* did you investigate any other flow based processing solutions?
+  * yes they are and continuing
+* would DSP be a candidate for masking data?
+  * yes
+* how does it scaling?
+  * horizontal scaling
+* can conditional branch?
+  * yes they can... for instance, a timeout or event trigger can end an aggregation
+* function to encrypt data?
+  * maybe later
+  * but you can write arbitrary code
+* is using an ESB feasible?
+  * not very useful
+  * most a human issue
+
+## 1:45: SEC1927 - ATT&CK™ Yourself Before Someone Else Does
+
+### What we think ATT&CK means to network defenders
+
+* read: ["aerial attack study" august 11 1964](http://oplaunch.com/resources/aerial-attack-study-1964.pdf)
+  * OODA loop
+    * observe
+    * orient
+    * decide
+    * act
+* read: [Lockheed Martin Cyber Kill Chain](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/documents/cyber/Gaining_the_Advantage_Cyber_Kill_Chain.pdf)
+  * post compromise cognitive thought model
+* VALUE ADD: are we watching external asset logs for recon actions?
+* read: [Intelligence-Driven Computer Network DefenseInformed by Analysis of Adversary Campaigns andIntrusion Kill Chains](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/documents/cyber/LM-White-Paper-Intel-Driven-Defense.pdf)
+* read: [The Diamond Model of intrusion Analysis](http://www.activeresponse.org/wp-content/uploads/2013/07/diamond.pdf)
+* review: ["socio-political axis" model by threatconnect](https://threatconnect.com/wp-content/uploads/Star-Wars-Slick-Sheet-1-1.pdf)
+
+### how you can hunt with ATT&CK
+
+* hierarchy:
+  * tactic
+    * techniques
+      * adversaries
+      * software
+* ATT&CK: integrates threat hunting, threat intel, and sec ops
+* Using ATT&CK techniques to buiild our hypothesis
+  * example: technique T1086
+    * adversaries will use PowerShell Empire to establish a foothold and carry out attacks
+* How might we confirm or refute our hypothesis:
+  * what is powershell?
+  * where can I learn more about?
+  * does it have default settings I can hunt
+  * what do data flows look like between src and st?
+  * what user accounts are being user
+  * what ports are being used?
+  * when did events occur
+  * are we able to see the contents of the scripts powershell is running to gain greater understanding?
+* Notional __Flow__ of PSE hunt: (covering all places where data flows) 
+  * indicators in ssl
+  * pivot to find internal/external IPsfirewall IDS wire
+  * user agent strings
+  * domains
+  * network indicator
+  * host attributes (user, event desc)
+  * iunique combindations of user/systems
+  * pivot info specifci users/systems of inteest
+  * map interesting processes
+  * additional attributres:
+    * part processes
+    * encoding
+    * accounts user
+    * sequencing of commands
+  * research commands uncovered
+  * compare commands executed on systems
+* map all data flows for each techniques
+  * possible in splunk
+
+### operationalization of ATT&CK in splunk
+
+* watch "threat  hunting web shells with splunk by james bower" - youtube
+* Flow of OODA:
+  * develop hypotheseis
+  * hynt to validate
+  * document finding from hunt
+  * iterate findings into se ops (process)
+  * create alerts based on hunt to be more proactive
+* review: "pyramid of pain"
+* example of pwoershell empire stuff to opreationalize:
+  * alert on encoded powershellalert when we see specific exec running in sequence
+  * alet on ssl issuer
+  * detect new accounts created
+    * have a ticket to ref it being made to validate
+  * vlacklist ip address
+  * monitor user agent string usage
+  * monitor for URIs
+  * monitor and alert on firewall being disabled
+
+### considering when operationalizaing ATT&CK
+
+* what ATT&CK really is: cataloging and assigning meta data to enrich events
+* refer to sigma use cases
+* review each ATT&CK TTP and break it out to make sure we have coverage
+  * atomic red team... but watch out for necessary correlations to reduce false positives
+  * https://github.com/olafhartong/SA-attck_nav
+  * https://github.com/olafhartong/sysmon-configs
+* extend ES to add event attributes
+  * labels --> field
+* GENERATE METADATA
+  * using `lookup * OUTPUT *`
+* where are our gaps?
+
+### conclusion
+
+* pick a model, any model
+  * models have biases
+  * ATT&CK is great but is APT focuesed
+* wonderful way to focus defences, find gaps, and write detections
+* several splunk tools that incorporate ATT&CK today
+
+### general thoughts
+* how can I find what normal is?
+* are there other frameworks that help with this?
+
+
+## 3:30PM: SEC1391 - Building a Security Monitoring Strategy 2.0
+
+### 
