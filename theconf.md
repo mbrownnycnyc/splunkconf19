@@ -80,6 +80,20 @@
     - [Splunk Success Framework: <-- review this on splunk.com](#splunk-success-framework----review-this-on-splunkcom)
   - [4:15PM: FN1206 - The path to operational enlightenment. An introduction to wire data with Splunk Stream.](#415pm-fn1206---the-path-to-operational-enlightenment-an-introduction-to-wire-data-with-splunk-stream)
     - [online session will be available later this week.](#online-session-will-be-available-later-this-week)
+  - [Tuesday Keynote: Splunk 8.0 and new acquisitions](#tuesday-keynote-splunk-80-and-new-acquisitions)
+    - [Splunk 8.0 new features](#splunk-80-new-features)
+    - [Data stream processor:](#data-stream-processor)
+    - [Splunk mobile:](#splunk-mobile)
+    - [IT Ops:](#it-ops)
+    - [DevOps:](#devops)
+    - [Splunk Investigate:](#splunk-investigate)
+    - [SecOps:](#secops)
+    - [Business Analytics](#business-analytics)
+  - [11:15AM: SEC2534 - Security visibility through Windows endpoint analytics (uberAgent)](#1115am-sec2534---security-visibility-through-windows-endpoint-analytics-uberagent)
+    - [Why?](#why)
+    - [uberAgent UXM: user expereince monitoring](#uberagent-uxm-user-expereince-monitoring)
+    - [uberAgent Endpoint security analytics (ESA)](#uberagent-endpoint-security-analytics-esa)
+    - [architecture](#architecture)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
@@ -104,7 +118,10 @@ Fundamentals 1, as well as the architecture training are free and are located on
 
 ## .conf Talks
 
-[.conf talks are free to watch for this year and historically.](https://conf.splunk.com/watch/conf-online.html?#/)
+* [.conf talks are free to watch for this year and historically.](https://conf.splunk.com/watch/conf-online.html?#/)
+* all .conf 19 talks will be posted to the portal within the next few weeks
+* all presentations may be available currently.  I will update.
+
 
 ## My schedule
 
@@ -915,3 +932,224 @@ Here are some additional notes on accelerating data models:
 ## 4:15PM: FN1206 - The path to operational enlightenment. An introduction to wire data with Splunk Stream.
 
 ### online session will be available later this week.
+
+
+## Tuesday Keynote: Splunk 8.0 and new acquisitions
+
+### Splunk 8.0 new features
+
+* Analytics workspace
+* MLTK 5.0:  smart assistants
+* RBAC advancements... various granular.
+* Workload management:  are we able to use this in Cloud?  Apply rules to people, such as searches
+* Data Stream Processor: real time analysis before index
+* Data Fabric Search: search across Splunk S3, HDFS.
+* Make sure that I open a cloud ticket to get mobile access.
+
+
+### Data stream processor:
+
+* VALUE ADD:  what is our data storage policy in regards to PIi?
+* Various sources and sinks
+* Can aggregate data!
+* Route data
+* Process data
+
+### Splunk mobile:
+
+* Quick usefuk data
+* Would HR want to understand sentiment across IM and Email?
+* Splunk>TV apple TV app
+
+### IT Ops:
+
+* Apply ML/AI to predict future state changes
+* VictorOps is alert source
+  * VictorOps: is an oncall manager
+* ITSI has Ai/ML glasstable
+* Integrates into phantom
+* VALUE ADD: Does ITSI unseat solarwinds?
+* VALUE ADD: Splunk app for Infrastructure
+* VALUE ADD: Compile KPis and KRIs for ops items as well as user surfaced items.
+
+### DevOps:
+
+* SignalFX and Omnition req
+* Monitoring: track things we know can go wrong
+* Observability: find things that you don't know can go wrong
+* Acheive with metrics (done have a problem?), traces (where is the problems?) and logs ( what is causing the problem?)
+  * metrics: signalfx
+  * Traces: SignalFX and omnition
+    * brings accountability to the code rather than the infrastructure
+  * Logs: splunk
+
+### Splunk Investigate:
+
+* collaboration plateform
+* focus on ops and dev
+* workbook is the scope
+  * you'd start by adding a panel / search
+    * now supports SQL like queries
+    * you can then create a child search... that uses the parent search as a basesearch
+
+
+### SecOps:
+
+* Splunk Operations Suite: Three core products that provide coverage:
+  * ES
+    * analytics reporting on investigations
+    * assets & identiy framework improvements
+    * Enhanced ML algos
+  * UBA
+    * easily develop custom ML models
+      * they created a UI that will make ML more easy to access and build
+    * efficiently manage known and unknown devices
+  * Phantom
+    * mobile support:
+      * workbook executions can be approved via the splunk mobile app (on iOS)
+    * workbook based investigations and remediations
+      * can be monitored from mobile app
+      * can be triggered/approved from mobile app 
+* Splunk Mission Control
+  * this will surface actions that were taken review by audit, CISO, and IT sec ops teams
+    * contains "response templates" not necessarily workbooks, but actual guidance for users.
+  * can compile artifacts
+  * can interface with splunk>core search (pull data from DFS)
+  * manage playbooks within Mission Control
+
+
+### Business Analytics
+
+* Splunk Business Flow --> send to Jay and Angad
+  * interfactive discovery, investigation and process
+  * What does this unseat?
+
+
+## 11:15AM: SEC2534 - Security visibility through Windows endpoint analytics (uberAgent)
+
+### Why?
+
+* uberAgent provides visibility into endpoints
+  * performance <-- all below items are monitored for times for instance, and it will provide outlier information that will be valuable... otherwise, these events seem pretty mundane.
+  * app usage
+  * security compliance
+  * scalable
+
+### uberAgent UXM: user expereince monitoring
+  * automatic application identification
+    * associates each Process Names into a logical entity called an application
+  * Application startup
+    * process creation
+    * startup duration <--
+  * Application performance
+    * resource utilization for entire apps or individual processes
+    * Big four + GPU
+  * Application errors
+    * crashes & hangs
+    * UI unresponsiveness
+  * Application inventory
+  * Application usage
+  * Foreground window time captures
+  * web apps:
+    * also provides granular visibility to web apps
+  * logon/logoff activity
+  * Session starts/ends
+  * user metadata:
+    * AD
+    * registry
+    * env variables
+  * On/off transitions
+    * startup/shutdown/suspend/resume
+  * machine metadata can be read from:
+    * AD
+    * registry
+    * env variables
+  * All network connections
+    * OS level and in browser
+  * network activirty per application & user
+    * data volume, latency, count
+    * success and fail connections
+      * firewall rule failures
+  * Wifi SSID, network type & ip address
+* VALUE ADD: does Cyberark EPM provide this information?  Times for actions, etc?
+  * if so, we can use this to observe our current processes and optimize infrastructure team owned products
+
+### uberAgent Endpoint security analytics (ESA)
+
+* adds deep security visibility to the UXM agent (one agent)
+* features
+  * goal identify risky processes
+    * match processes get
+      * risk score (any number)
+      * tag (any string)
+        * have a rule definition language
+          * regex
+          * built-in reg extensions: PATH_REGEX
+            * combination of env variables & regex
+            * env var is evaluated first, then regex... it's just builtin:
+              * `^%programfiles%\\Windows Defender\\.+\.exe$`
+          * rule blocks:
+            * re-usable rule blocks
+              ````
+              [ConfigBlockDefines name=ParentIsMSOffice]
+              Parent.name = ^excel\.exe$
+              Parent.name = ^msaccess\.exe$
+              ````
+            * there are many attributes attached to entities, such as a "Process" entity as shown above
+          * rule examples:
+            * you can insert this `ruleblock` in a rule
+              ````
+              [ProcessTaggingRule]
+              RuleName = Detect script child process of MS Office apps
+              EventType = Process.Start
+              @ConfiguBlockInsert ParentIsMsOffice
+              Process.Name = ^cmd\.exe$
+              Process.Name = ^powershell\.exe$
+              Process.Name = ^cscript\.exe$
+              Process.Name = ^wscript\.exe$
+              Process.Name = ^ftp\.exe$
+              Tag = proces-start-msoffice-child
+              RiskScore = 100
+              ```` 
+            * rule detection elements:
+              * process parent properties
+                * name
+                * user
+                * path
+                * command line
+                * ...
+              * application name, version
+              * company elevation status
+              * session id
+              * directory permissions
+                * detection elements of directory permissions:
+                  *  `Process.DirectoryUserWriteable`
+                    *  checks if the process' directory is writeable by the user
+                  *  `Process.DirectorySdSddl`
+                     *  Security descriptor in SDDL format
+                     *  What uberAgent does:
+                        *  SIDs resolve to object names
+                        *  Permissions converted from SDDL hex access masks to strings
+               * Predefined rule elements VALUE ADD: these are all use cases
+                 * process starts from directories with a `low mandatory integrity` label
+                 * process starts from directories that are user-writeable
+                 * script child processes of MS office applications
+                 * child processes of the WMI service
+                 * child process of Adobe Reader
+                 * LOLBAS (various)
+             * scheduled tasks integrity:
+               * UI missing: COM actions and custom triggers
+               * authir task is arbitrary
+               * uberAgent detects new or changes tasks
+                 * reads all properties of the task, including COM, exec, email, message
+    * dashboard to visualize findings
+    * uberAgent provides process hierarchies and trajectory
+
+### architecture
+
+* install agent
+* it speaks directly to the a forwarder via TCP
+* TAs exist
+  * UXM
+  * ESA
+* 
