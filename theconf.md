@@ -89,6 +89,7 @@
     - [Splunk Investigate:](#splunk-investigate)
     - [SecOps:](#secops)
     - [Business Analytics](#business-analytics)
+- [Wednesday](#wednesday)
   - [11:15AM: SEC2534 - Security visibility through Windows endpoint analytics (uberAgent)](#1115am-sec2534---security-visibility-through-windows-endpoint-analytics-uberagent)
     - [Why?](#why)
     - [uberAgent UXM: user expereince monitoring](#uberagent-uxm-user-expereince-monitoring)
@@ -143,6 +144,31 @@
     - [take aways](#take-aways-1)
     - [Q&A](#qa-1)
     - [use cases:](#use-cases)
+- [Thursday](#thursday)
+  - [10:30AM: Master Joining Datasets without using Join](#1030am-master-joining-datasets-without-using-join)
+    - [intro:](#intro)
+    - [why bad things are bad](#why-bad-things-are-bad)
+      - [what's wrong with join and append](#whats-wrong-with-join-and-append)
+      - [what's wrong with transaction](#whats-wrong-with-transaction)
+      - [mapreduce implementation](#mapreduce-implementation)
+      - [testing if badness is happening](#testing-if-badness-is-happening)
+      - [use `stats`](#use-stats)
+      - [`streamstats` and `eventstats`](#streamstats-and-eventstats)
+      - [two different time ranges](#two-different-time-ranges)
+    - [resources](#resources)
+  - [11:45AM: How Splunkbase identifies, resolves, and reviews incidents using Splunk>Investigates](#1145am-how-splunkbase-identifies-resolves-and-reviews-incidents-using-splunkinvestigates)
+    - [purposes of splunkbase](#purposes-of-splunkbase)
+    - [what is Splunk>Investigate?](#what-is-splunkinvestigate)
+    - [workbook examples](#workbook-examples)
+    - [functions](#functions)
+    - [licensing](#licensing)
+    - [Q&A:](#qa)
+  - [1PM: Implementing Predictive Maintenance](#1pm-implementing-predictive-maintenance)
+    - [outline](#outline)
+    - [intro](#intro-2)
+    - [when to perform maintenance:](#when-to-perform-maintenance)
+    - [predicitive maintenance analytics process as within the TA:](#predicitive-maintenance-analytics-process-as-within-the-ta)
+  - [2:15PM: IT1970 - Tracking Micro Services with Splunk](#215pm-it1970---tracking-micro-services-with-splunk)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
@@ -196,9 +222,9 @@ Fundamentals 1, as well as the architecture training are free and are located on
   * 3:30PM: SEC1391 - Building a Security Monitoring Strategy 2.0
   * 4:45PM: IT1761 - Service and Asset Discovery with Wire Data
 * Thursday
-  * 10:30AM: Deploying Splunk Enterprise securiy and Splunk Phantom at Scale
-  * 11:45AM: SEC1179 - The House Always Wins: Using Splunk Enterprise to Fight Data Exfiltration From Insider Threats
-  * 1PM: IoT1103 - Applying Splunk Essentials for Predictive Maintenance
+  * 10:30AM: Master Joining Datasets without using Join
+  * 11:45AM: How Splunkbase identifies, resolves, and reviews incidents using Splunk>Investigates
+  * 1PM: Implementing Predictive Maintenance
   * 2:15PM: IT1970 - Tracking Micro Services with Splunk
 
 ## Breakout talks that are interesting
@@ -1097,6 +1123,8 @@ ___this is worth rewatching___
 
 ---
 
+# Wednesday 
+
 ## 11:15AM: SEC2534 - Security visibility through Windows endpoint analytics (uberAgent)
 
 ### Why?
@@ -1747,3 +1775,213 @@ ___this is worth rewatching___
 * discover new connections (part of baselining a host)
   * store stuff in a CSV
 * remember when we are architecting, we need to place the collectors at all critical locations
+
+---
+
+# Thursday
+
+## 10:30AM: Master Joining Datasets without using Join
+
+___ worth rewatching ___
+
+* cisco call manager TA
+* read the mapreduce paper
+* this is mostly about making searches efficient
+
+### intro:
+
+* why join and append are evil
+
+### why bad things are bad
+
+* review flow chart
+* use `stats` (it's really "group") instead of `join`
+
+#### what's wrong with join and append
+
+* fundamenttally slow 
+* *results are truncated if you exceeed 50000 rows
+* search in seuare brackets is quietly autofinalized, when it's exec time ecedds 120 seconds
+* 2 jobs instead of 1 means extra overhead
+* autofinalize
+* breaking mapreduce
+
+#### what's wrong with transaction
+
+* it's design for edge cases... do not use it instead of stats
+
+#### mapreduce implementation
+
+* `sourcetype=cdr type=outgoing | stats sum(duration) by device_type`
+* sat we want to see the sum of all call durations for each of 5 devices_types, across a million calls storaged in 10 indexers
+* VALUE ADD: I definitedly should be using summary indexes
+* mapreduce:
+  * "pre commands" how the indexers know to send back only sufficient statistics
+  * look up categories of esarch commands:
+    * distributable streaming
+      * eval
+      * where
+      * saerch
+      * rename
+      * fillbull
+      * fields
+      * mvexpand
+      * rex
+    * transforming
+      * pre versionS:
+        * stats
+        * chart
+        * timechart
+      * no preversion
+        * join append
+
+#### testing if badness is happening
+
+* `timewrap` command
+* `addinfo` command
+* open the job inspector
+  * close the exectuiion costs
+  * open the search job operators
+    * remotesearch == should be generative and should always end in `| prestats ...`
+    * reportsearch == should be just the last command (like `chart`), should not be generative
+
+#### use `stats`
+
+* try to reduce data before using `join`, use `stats` before and during `join`
+* instead of using a `join`, actually use an `OR`, then `stats`
+* always use `stats values()`
+* also use `eval field if() | stats ...`
+  * try with execute a `eval replace()` within the `eval if()`
+* ALWAYS PIPE INTO `stats`
+* VALUE ADD: multivalue fields
+* use `eval` to eliminate events by settings them to `null()` if you don't want them.
+* use `eval {type}_duration=duration` <-- creates a dynamic name... then
+  * leverage `macros` that will intake these dynamic names
+* `inputlookup append=t` <-- look this up
+
+#### `streamstats` and `eventstats`
+
+* these are not distributable streaming vents
+* `searchtxn` <-- check this out for some interesting `transctions`
+
+#### two different time ranges
+
+* use `[]`, as you can now use `earliest` and `latest` within
+
+
+### resources
+
+* slack channels: #search-help, #tinfoilstats
+
+## 11:45AM: How Splunkbase identifies, resolves, and reviews incidents using Splunk>Investigates
+
+### purposes of splunkbase
+
+* app distribution platform
+  * apps bhy splunk and 3rd party apps
+* APIs for app install from within Splunk
+* Users can extend the power of Splunk
+
+### what is Splunk>Investigate?
+
+* cloud-based application focused reducing time to incident resolution, improve collaboration and helping teams conduct effective postmortems.
+* what they do:
+  * alert
+  * investigate
+  * communication
+  * resolution
+  * review
+  * action
+* core capabilities:
+  * collaborate
+  * smart knowledge object library
+  * visual storytelling with dashboards
+  * add and process data seamlessly
+  * scalable cloud infrastructure
+
+### workbook examples
+
+  * go to workbook
+  * go to views and try to look
+  * start from scratch
+    * give it a title
+    * various objects are available
+    * can share to other people
+    * communication notes
+    * can add images
+      * can be annocated
+    * can issue searches
+      * can leverage visualizations
+    * child search bases it's search off a parent search
+    * You can optionally extract fields
+
+### functions
+  * add data to investigate
+  * can tansform data on import
+
+### licensing
+  * $45/seat
+  * there are data limitations
+
+### Q&A:
+
+* can you paste image data directly?
+* screenshare/video/gif sharing?
+* what does licensing look like?
+  * $45/user/month
+
+---
+
+## 1PM: Implementing Predictive Maintenance
+
+--> check out the game called Go
+--> this is a tlak on ML/AI really... it is a valuable use case, and the data source is not predictable (jet engines).
+
+### outline
+
+* why predicitive maintenance
+* intro to the solutions that will make a big impact in your org
+* get you pragmatic analytics skilsl for predicitive maintenance
+
+### intro
+
+* maturity curve from bottom to top
+  * reactive: example is light bulb
+    * use something until some fails
+  * preventative: example is changing your oil every 3000 miles
+    * maintaining at a regular schedule regardless of the condition
+  * condition-based
+  * predictive: example is impact a person can make
+    * maintaining at the optimal time based on data and prediction
+    * should be applied to all assets in operation
+    * high availability, cost savings, organizational efficiency
+  * ML/AI
+* what is predictive maintenance
+  * same item under different conditions have different maintenance needs
+* TA: Splunk Essentials for Predictive Maintenance
+
+### when to perform maintenance:
+* there is a optimization balance between economics and risk
+  * too long between maintenance, risk increases
+  * too short between, costs more
+  * analyze to maximize... so perform perventative maintenance before earliest previous failure
+
+### predicitive maintenance analytics process as within the TA:
+
+* stage 1: data collection
+* stage 2: data exploratio
+  * box plot / bar charts
+  * using a stdev
+* stage 3: analysis
+  * statistical approach
+    * anomaly detection
+    * remaining useful life
+  * ML approach
+    * unsupervised learning
+    * supervised learning
+* stage 4: operationalization
+
+
+## 2:15PM: IT1970 - Tracking Micro Services with Splunk
+
+___ this talk will be online at a later time ___
