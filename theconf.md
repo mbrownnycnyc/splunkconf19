@@ -132,6 +132,17 @@
       - [demonstrate value](#demonstrate-value)
     - [key take aways](#key-take-aways)
   - [4:45PM: IT1761 - Service and Asset Discovery with Wire Data](#445pm-it1761---service-and-asset-discovery-with-wire-data)
+    - [problem statement](#problem-statement)
+    - [what is wire data? what is splunk stream?](#what-is-wire-data-what-is-splunk-stream)
+    - [splunk stream - product overview](#splunk-stream---product-overview)
+    - [collection points:](#collection-points)
+    - [discovery phases](#discovery-phases)
+    - [using stream for asset (host) discovery](#using-stream-for-asset-host-discovery)
+    - [using stream for service discovery](#using-stream-for-service-discovery)
+    - [demo](#demo)
+    - [take aways](#take-aways-1)
+    - [Q&A](#qa-1)
+    - [use cases:](#use-cases)
 
 # questions for Telemak/David
 * will they ever expose dashboard XML as git repos for cloud instances, for instance?
@@ -482,6 +493,7 @@ Here are some additional notes on accelerating data models:
 
 * the CTO presented several new products that seem interesting.
 
+---
 
 ## 11AM: SEC2787 - Security Super Session
 
@@ -605,6 +617,9 @@ Here are some additional notes on accelerating data models:
   * Data Fabric Search (DFS)
     * utilizing search across many data lakes
 
+
+---
+
 ## 12:30PM: FN1945 - Artificial Intelligence got you down? Here’s Machine Learning for Humans!
 
 ### Machine Learning
@@ -723,7 +738,12 @@ Here are some additional notes on accelerating data models:
   * advanced system: splunk for analytics and data science
 
 
+---
+
 ## 1:45PM: SEC1556 - Building Behavioral Detections: Cross-Correlating Suspicious Activity with the MITRE ATT&CK™ Framework
+
+___this is worth rewatching___
+
 
 ### My warnings
 * this talk was awesome.
@@ -864,6 +884,8 @@ Here are some additional notes on accelerating data models:
   * outliers can be offset by inflating the riskscore
 * google around for olaf thomas
 
+---
+
 
 ## 3PM: FN1054 - Best Practices and Better Practices for Admins
 
@@ -974,10 +996,13 @@ Here are some additional notes on accelerating data models:
     * create a welcome page per team... for instance, use them as shared workspace.
   * search for "splunk ssd role-based data"
 
+---
+
 ## 4:15PM: FN1206 - The path to operational enlightenment. An introduction to wire data with Splunk Stream.
 
 ### online session will be available later this week.
 
+---
 
 ## Tuesday Keynote: Splunk 8.0 and new acquisitions
 
@@ -1069,6 +1094,8 @@ Here are some additional notes on accelerating data models:
   * interfactive discovery, investigation and process
   * What does this unseat?
 
+
+---
 
 ## 11:15AM: SEC2534 - Security visibility through Windows endpoint analytics (uberAgent)
 
@@ -1207,6 +1234,8 @@ Here are some additional notes on accelerating data models:
   * UXM
   * ESA
 
+---
+
 ## 1PM: Using Splunk Data Stream Processor for advanced stream management
 
 ### intro... why did T-Mobile start using DSP?
@@ -1298,6 +1327,8 @@ Here are some additional notes on accelerating data models:
 * is using an ESB feasible?
   * not very useful
   * most a human issue
+
+---
 
 ## 1:45: SEC1927 - ATT&CK™ Yourself Before Someone Else Does
 
@@ -1403,9 +1434,11 @@ Here are some additional notes on accelerating data models:
 * are there other frameworks that help with this?
 
 
+---
+
 ## 3:30PM: SEC1391 - Building a Security Monitoring Strategy 2.0
 
-* __worth rewatching__
+___this is worth rewatching___
 
 ### intro
 
@@ -1461,7 +1494,6 @@ Here are some additional notes on accelerating data models:
 * data onboarding
   * guided data onboarding as escurity essentials
   * quick start guides: center of excellence
-* 
 
 ### pick a security monitoring framework:
 
@@ -1484,7 +1516,6 @@ Here are some additional notes on accelerating data models:
 * Third parties
   * paterns 
 * Containers
-  * 
 
 ### onboard necessary data sources to cover ES
 
@@ -1512,7 +1543,7 @@ Here are some additional notes on accelerating data models:
 * create visibility, create presentations
 
 ### alerting and detection frameworks
-* diamon model for intrusion analysis
+* diamond model for intrusion analysis
 * MITRE ATT&CK
 * CIS
 * Palantir
@@ -1565,7 +1596,6 @@ Here are some additional notes on accelerating data models:
 
 * make sure you have use cases that make sense
 
-
 #### validate you use cases
 
 * gaurantee integrity of your alerts
@@ -1573,7 +1603,6 @@ Here are some additional notes on accelerating data models:
 * purple teaming
   * see ATT&CK navigator and simulation runner
   * use atomic red team
-
 
 #### maturity of program
 
@@ -1605,5 +1634,116 @@ Here are some additional notes on accelerating data models:
 * avoid complacency: continuously seek opportunities for improvement and refinement
 * focus on business outcomes
 
+---
+
 ## 4:45PM: IT1761 - Service and Asset Discovery with Wire Data
 
+### problem statement
+
+* assets are easily added to networks
+  * we make it easy by providing DHCP or not insistent on NAC
+  * what if those assets are not authorized?
+* services can be easily added to existing host
+  * often software adds services that we're not even aware of!
+* how do we manage these assets and services if we're not even aware of them?
+* how will wire data help solve this problem?
+  * wire data represents capture of true conversations between endpoints
+  * it has the "omnicient view" of what actually transpiredthe cconverastions contain the details about each transaction, including the time of occurrence
+  * less change of interference
+    * intentional / malicious
+    * load or resource based
+  * multidimensional / multiresolution data
+
+### what is wire data?  what is splunk stream?
+
+* network convesations
+* machine data
+* poly-structure ddata
+* authoritative record of real-time and historical communication between machines and applications
+
+### splunk stream - product overview
+
+* traditional wire data flow-type records (such as netflow) generally contains only IP addresses and tcp or udp ports
+* while this ca show host-host connections, it doesn't give any insight about the content of those conversations (like telephone call records)
+* splunk Stream parses wire data all the way up the stack and generates Events with information at every level (more akin to a written transcript of a phone call)
+* VALUE ADD: reduced rate license for Stream exist
+* stuff stream does in v7.1:
+  * packet metdata collection
+    * collects elements of the application conversationcan use live data from a tap or SPAN port
+    * can extract from PCAP files
+    * 1GbE and 10GbE link options
+    * can collect directly on host's inband interface
+  * Targeted packet and file collection
+    * collections "sessionized" bidirectional PCAPs
+    * Extracts reassembled File Attachments also
+    * based on L2,3,4,7 target criteria
+    * Saved to customer-supplied storage
+    * Retrieval proxied by SH
+  * NetFlow ingestion
+    * explocit flow collector for other flow sources
+    * netflow v5, v9, IPFIX, jFlow, cFlowd, sFlow
+    * Can aggregate ingested flow data
+  * estimate mode: (step 1 to implementation, this is used to estimate cost)
+    * deploy without collecting data
+  * commercial app detection (300+)
+    * works even if the app is encrypted
+  * tls/ssl decryption
+  * aggregation mode:
+    * statistics generate at endpoint
+    * equivalant to `stats sum(field1), avg(field2)` in SPL
+  * filter at endpoint
+  * out of the box content
+  * many protocols are supported
+  * many categories and applicaiton supported
+
+### collection points:
+
+* place them anywhere
+* on a cloud locally
+* stream TA VALUE ADD: maybe this would be useful.
+
+### discovery phases
+* harvesting
+  * collecting data from observed traffic
+* enrichment
+  * adding value to harvested data by appending lookup info
+    * appending enrichment data: owner, dns name, service name... etc.
+* alerting
+  * generating alerts when new or unusual hosts or services appear in the baseline
+ 
+### using stream for asset (host) discovery
+
+* Host ip address iar in every network packet
+* What packets to look at?
+* We want local assets:
+  * ARP and DNS packets tend to be local only
+  * SMB and NFS may be also, depending on location
+  * anything stopped at the firewall is a good option
+    * filter these
+* examples:
+  * determine internal networks
+    * can use macro with lookup table if complex
+    * here we use `cidrmatch` for simple RFC1918 internal networks
+  * Summerize with stats
+  * opertionally oputput with `outputcsv` to store and diff
+
+### using stream for service discovery
+
+* once tou know internal assets, you can use those as limiting list for services
+* service must be running on internal host if you see traffic to itcompare known list of authorized services to harvested (observed) service and alert on anomolies
+* enrich with src_port and dst_port
+
+### demo
+
+### take aways
+
+* wire data can be used to discovery internal hosts and services
+* splunk stream can provide L7 metadata to help facilitate discovery
+
+### Q&A
+
+### use cases:
+
+* discover new connections (part of baselining a host)
+  * store stuff in a CSV
+* remember when we are architecting, we need to place the collectors at all critical locations
